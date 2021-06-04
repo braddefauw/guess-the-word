@@ -1,4 +1,4 @@
-const guessedLettersElement = document.querySelector(".guessed-letters");
+let guessedLettersElement = document.querySelector(".guessed-letters");
 const guess = document.querySelector(".guess");
 const letter = document.querySelector(".letter");
 const wordInProgress = document.querySelector(".word-in-progress");
@@ -7,7 +7,7 @@ const remainingGuessesElement = document.querySelector("span");
 const message = document.querySelector(".message");
 const playAgain = document.querySelector(".play-again");
 let word = "magnolia";
-const guessedLettersArray = [];
+let guessedLettersArray = [];
 let remainingGuesses = 8;
 
 const getWord = async function(){
@@ -104,6 +104,7 @@ const countGuessesRemaining = function(guess){
     }
     if(remainingGuesses === 0){
         message.innerText = `Game over. The word is ${word}`;
+        startOver();
     }else if(remainingGuesses === 1){
         remainingGuessesElement.innerText = `1 guess`;
     }else{
@@ -114,6 +115,28 @@ const countGuessesRemaining = function(guess){
 const checkIfWin = function (){
     if(word.toUpperCase() === wordInProgress.innerText){
         message.classList.add("win");
-        message.innerHTML = `<p class="highlight"> You guessed the correct word! Congrats! </p> `
+        message.innerHTML = `<p class="highlight"> You guessed the correct word! Congrats! </p> `;
+        startOver();
     }
 };
+
+const startOver = function(){
+    guess.classList.add("hide");
+    remaining.classList.add("hide");
+    guessedLettersElement.classList.add("hide");
+    playAgain.classList.remove("hide");
+}
+
+playAgain.addEventListener("click", function(){
+    message.classList.remove("win");
+    message.innerText = "";
+    guessedLettersElement.innerText = "";
+    remainingGuesses = 8;
+    guessedLettersArray = [];
+    remainingGuessesElement.innerText = `${remainingGuesses} guesses`;
+    guess.classList.remove("hide");
+    remaining.classList.remove("hide");
+    guessedLettersElement.classList.remove("hide");
+    playAgain.classList.add("hide");
+    getWord();
+})
